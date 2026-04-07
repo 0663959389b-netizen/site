@@ -117,3 +117,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+# Media файли — це файли, які завантажують користувачі/адміни (фото товарів)
+MEDIA_URL = '/media/'
+# Шлях до папки на комп'ютері, де фізично будуть лежати фото
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
