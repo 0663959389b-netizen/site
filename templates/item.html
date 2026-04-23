@@ -1,14 +1,65 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
+    <meta charset="UTF-8">
     <title>{{ title }}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <h1>Наше {{ title }}</h1>
-    <ul>
-        {% for dish in dishes %} <li>{{ dish }}</li>
-        {% endfor %}
-    </ul>
-    <hr>
-    <a href="/">Повернутися на Головну</a> </body>
+    <div class="top-nav">
+        <a href="{% url 'home_url' %}" class="nav-link">ГОЛОВНА</a>
+        <a href="{% url 'menu_url' %}" class="nav-link">МЕНЮ</a>
+        <a href="{% url 'services_url' %}" class="nav-link">ПОСЛУГИ</a>
+        <a href="{% url 'contacts_url' %}" class="nav-link">КОНТАКТИ</a>
+    </div>
+
+    <div class="container">
+        <h1>МЕНЮ</h1>
+        
+        <div class="categories-wrapper">
+            <a href="{% url 'menu_url' %}" class="cat-btn">Всі страви</a>
+            {% for cat in categories %}
+                <a href="{% url 'menu_url' %}?category={{ cat.id }}" class="cat-btn">{{ cat.name }}</a>
+            {% endfor %}
+        </div>
+        
+        <div class="menu-container">
+            {% for dish in dishes %}
+            <div class="dish-item">
+                {% if dish.image %}
+                    <img src="{{ dish.image.url }}" alt="{{ dish.name }}" class="dish-img">
+                {% endif %}
+                <div class="dish-header">
+                    <span class="dish-name">{{ dish.name }}</span><span class="dots"></span><span class="dish-price">{{ dish.price }} ГРН</span>
+                </div>
+                <div class="dish-desc">Склад: {{ dish.description }}</div>
+                <button class="btn-buy" disabled>Купити</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col about-col">
+                <h4>ПРО РЕСТОРАН</h4>
+                <p>Level Up Rest — це місце, де гастрономія стає мистецтвом. Кожна страва — це історія смаку.</p>
+            </div>
+            <div class="footer-col info-col">
+                <h4>ГРАФІК РОБОТИ</h4>
+                <p>Пн - Пт: 10:00 — 23:00</p>
+                <p>Сб - Нд: 11:00 — 01:00</p>
+            </div>
+            <div class="footer-col info-col">
+                <h4>КОНТАКТИ</h4>
+                <p>м. Луцьк, вул. Лесі Українки, 15</p>
+                <p>Тел: +38 (050) 123-45-67</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 LEVEL UP RESTAURANT GROUP. Всі права захищені.</p>
+        </div>
+    </footer>
+</body>
 </html>

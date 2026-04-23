@@ -1,16 +1,14 @@
 from django.contrib import admin
-from .models import Category, Dish, Service # Імпортуємо наші моделі
+from .models import Category, Dish, Service, Review
 
-# Налаштовуємо адмінку для страв
+# Твої круті налаштування для відображення страв
 @admin.register(Dish)
 class DishAdmin(admin.ModelAdmin):
-    # Відображаємо назву, ціну та дати, як просить викладач
-    list_display = ('name', 'category', 'price', 'created_at', 'updated_at')
-    # Додаємо фільтр за категорією та датою створення
-    list_filter = ('category', 'created_at')
-    # Додаємо пошук за назвою страви
-    search_fields = ('name',)
+    list_display = ['name', 'price', 'category', 'created_at']
+    list_filter = ['category', 'created_at']
+    search_fields = ['name', 'description']
 
-# Реєструємо інші моделі просто (без додаткових налаштувань)
+# Реєстрація інших таблиць
 admin.site.register(Category)
 admin.site.register(Service)
+admin.site.register(Review)
