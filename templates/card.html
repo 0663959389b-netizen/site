@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Ваш кошик - Level Up Rest</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="top-nav">
+        <a href="{% url 'home_url' %}" class="nav-link">ГОЛОВНА</a>
+        <a href="{% url 'menu_url' %}" class="nav-link">МЕНЮ</a>
+        <a href="{% url 'services_url' %}" class="nav-link">ПОСЛУГИ</a>
+        <a href="{% url 'contacts_url' %}" class="nav-link">КОНТАКТИ</a>
+        <a href="{% url 'cart_url' %}" class="nav-link cart-link">🛒 КОШИК</a>
+    </div>
+
+    <div class="container">
+        <h1>ВАШ КОШИК</h1>
+
+        {% if items %}
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Фото</th> <th>Страва</th>
+                        <th>Ціна</th>
+                        <th class="text-center">Кількість</th>
+                        <th>Сума</th>
+                        <th>Дія</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in items %}
+                    <tr>
+                        <td>
+                            {% if i.dish.image %}
+                                <img src="{{ i.dish.image.url }}" class="cart-dish-img">
+                            {% endif %}
+                        </td>
+                        
+                        <td class="cart-item-name">{{ i.dish.name }}</td>
+                        <td>{{ i.dish.price }} грн</td>
+                        <td class="text-center">
+                            <div class="qty-box">
+                                <a href="{% url 'update_cart' i.dish.id 'decrease' %}" class="qty-btn-elegant">-</a>
+                                <span class="qty-value">{{ i.qty }}</span>
+                                <a href="{% url 'update_cart' i.dish.id 'increase' %}" class="qty-btn-elegant">+</a>
+                            </div>
+                        </td>
+                        <td class="accent-text">{{ i.sub }} грн</td>
+                        <td>
+                            <a href="{% url 'update_cart' i.dish.id 'remove' %}" class="remove-btn">✖ Видалити</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div class="cart-grand-total">
+                ДО СПЛАТИ: <span>{{ total }} ГРН</span>
+            </div>
+            
+            <div class="checkout-wrapper">
+                <button class="btn-buy" onclick="checkoutOrder()">ОФОРМИТИ ЗАМОВЛЕННЯ</button>
+            </div>
+        {% else %}
+            <div class="empty-cart-wrapper">
+                <h3 class="empty-cart-msg">Ви ще не обрали жодної страви.</h3>
+                <a href="{% url 'menu_url' %}" class="btn-buy go-menu-btn">ПЕРЕЙТИ ДО МЕНЮ</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col about-col">
+                <h4>ПРО РЕСТОРАН</h4>
+                <p>Level Up Rest — це місце, де гастрономія стає мистецтвом. Кожна страва — це історія смаку.</p>
+            </div>
+            <div class="footer-col">
+                <h4>ГРАФІК РОБОТИ</h4>
+                <p>Пн - Пт: 10:00 — 23:00</p>
+                <p>Сб - Нд: 11:00 — 01:00</p>
+            </div>
+            <div class="footer-col">
+                <h4>КОНТАКТИ</h4>
+                <p>м. Луцьк, вул. Лесі Українки, 15</p>
+                <p>Тел: +38 (050) 123-45-67</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 LEVEL UP RESTAURANT GROUP. Всі права захищені.</p>
+        </div>
+    </footer>
+
+    <script>
+        function checkoutOrder() {
+            alert("✅ Ваше замовлення оформлено!\nОчікуйте, менеджер скоро з вами зв'яжеться.");
+            window.location.href = "{% url 'home_url' %}";
+        }
+    </script>
+</body>
+</html>

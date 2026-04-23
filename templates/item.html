@@ -12,6 +12,7 @@
         <a href="{% url 'menu_url' %}" class="nav-link">МЕНЮ</a>
         <a href="{% url 'services_url' %}" class="nav-link">ПОСЛУГИ</a>
         <a href="{% url 'contacts_url' %}" class="nav-link">КОНТАКТИ</a>
+        <a href="{% url 'cart_url' %}" class="nav-link">🛒 КОШИК <span style="color:#fff;">({{ cart_count|default:"0" }})</span></a>
     </div>
 
     <div class="container">
@@ -34,7 +35,32 @@
                     <span class="dish-name">{{ dish.name }}</span><span class="dots"></span><span class="dish-price">{{ dish.price }} ГРН</span>
                 </div>
                 <div class="dish-desc">Склад: {{ dish.description }}</div>
-                <button class="btn-buy" disabled>Купити</button>
+                
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #1a1a1a; display: flex; justify-content: space-between; align-items: center;">
+                    
+                    <div>
+                        <div style="color: #888; font-size: 0.85em; margin-bottom: 5px; text-transform: uppercase;">Середній бал: <span style="color: #c5a880; font-weight: bold; font-size: 1.2em;" class="avg-score" id="avg-{{ dish.id }}">{% if dish.avg_rating %}{{ dish.avg_rating|floatformat:1 }}{% else %}0.0{% endif %}</span></div>
+                        
+                        <div class="dish-stars" id="stars-container-{{ dish.id }}">
+                            <span class="star" data-val="1" onclick="submitRating({{ dish.id }}, 1)">★</span>
+                            <span class="star" data-val="2" onclick="submitRating({{ dish.id }}, 2)">★</span>
+                            <span class="star" data-val="3" onclick="submitRating({{ dish.id }}, 3)">★</span>
+                            <span class="star" data-val="4" onclick="submitRating({{ dish.id }}, 4)">★</span>
+                            <span class="star" data-val="5" onclick="submitRating({{ dish.id }}, 5)">★</span>
+                        </div>
+                        
+                        <form method="post" id="form-{{ dish.id }}" style="display: none;">
+                            {% csrf_token %}
+                            <input type="hidden" name="dish_id" value="{{ dish.id }}">
+                            <input type="hidden" name="score" id="input-{{ dish.id }}" value="">
+                        </form>
+                    </div>
+
+                    <form action="{% url 'add_to_cart' dish.id %}" method="post" style="margin: 0;" onsubmit="addToCartAjax(event, this)">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-buy" style="margin: 0; min-width: 150px;">В кошик</button>
+                    </form>
+                </div>
             </div>
             {% endfor %}
         </div>
@@ -61,5 +87,61 @@
             <p>&copy; 2026 LEVEL UP RESTAURANT GROUP. Всі права захищені.</p>
         </div>
     </footer>
+
+    <script>
+        function addToCartAjax(event, form) {
+            event.preventDefault(); 
+            const btn = form.querySelector('button');
+            
+            fetch(form.action, {
+                method: form.method,
+                body: new FormData(form)
+            }).then(() => {
+                btn.innerText = 'ДОДАНО ✔';
+                btn.style.backgroundColor = '#fff';
+                btn.style.color = '#0b0907';
+            });
+        }
+
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.avg-score').forEach(el => {
+                let dishId = el.id.split('-')[1];
+                let avg = parseFloat(el.innerText);
+                fillStars(dishId, Math.round(avg));
+            });
+        });
+
+        function fillStars(dishId, rating) {
+            let stars = document.querySelectorAll('#stars-container-' + dishId + ' .star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('filled');
+                } else {
+                    star.classList.remove('filled');
+                }
+            });
+        }
+
+        function submitRating(dishId, score) {
+            fillStars(dishId, score); 
+            document.getElementById('input-' + dishId).value = score; 
+            document.getElementById('avg-' + dishId).innerText = score.toFixed(1) + " (Оновлюється...)";
+            setTimeout(() => document.getElementById('form-' + dishId).submit(), 800); 
+        }
+
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('mouseover', function() {
+                let val = this.getAttribute('data-val');
+                let container = this.parentElement;
+                container.querySelectorAll('.star').forEach((s, idx) => {
+                    if(idx < val) s.classList.add('hover');
+                    else s.classList.remove('hover');
+                });
+            });
+            star.addEventListener('mouseout', function() {
+                this.parentElement.querySelectorAll('.star').forEach(s => s.classList.remove('hover'));
+            });
+        });
+    </script>
 </body>
 </html>
