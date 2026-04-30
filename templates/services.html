@@ -1,26 +1,14 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <title>Послуги - Level Up Rest</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-    <div class="top-nav">
-        <a href="{% url 'home_url' %}" class="nav-link">ГОЛОВНА</a>
-        <a href="{% url 'menu_url' %}" class="nav-link">МЕНЮ</a>
-        <a href="{% url 'services_url' %}" class="nav-link">ПОСЛУГИ</a>
-        <a href="{% url 'contacts_url' %}" class="nav-link">КОНТАКТИ</a>
-        <a href="{% url 'cart_url' %}" class="nav-link cart-link">🛒 КОШИК</a>
-    </div>
+{% extends 'base.html' %}
+{% block title %}Послуги - Level Up Rest{% endblock %}
 
-    <div class="container">
-        <h1>НАШІ ПОСЛУГИ</h1>
+{% block content %}
+    <h1>НАШІ ПОСЛУГИ</h1>
+    
+    <div class="services-list">
         {% for service in services %}
         <div class="service-card">
             {% if service.image %}
-                <img src="{{ service.image.url }}" alt="{{ service.title }}" class="service-img">
+                <img src="{{ service.image.url }}" class="service-img" alt="{{ service.title }}">
             {% endif %}
             <h2 class="service-title">{{ service.title }}</h2>
             <p class="service-desc">{{ service.details }}</p>
@@ -28,26 +16,33 @@
         {% endfor %}
     </div>
 
-    <footer>
-        <div class="footer-container">
-            <div class="footer-col about-col">
-                <h4>ПРО РЕСТОРАН</h4>
-                <p>Level Up Rest — це місце, де гастрономія стає мистецтвом. Кожна страва — це історія смаку.</p>
+    <div class="contact-block service-request-container">
+        <h3 class="contact-heading">ЗАМОВИТИ ПОСЛУГУ</h3>
+        <p class="hero-subtitle">Залиште номер, і ми зв'яжемося з вами:</p>
+        <form method="post" action="{% url 'service_request' %}" class="service-form-stack">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <p class="form-label">Оберіть послугу:</p>
+                <select name="service_name" class="service-select-custom">
+                    {% for s in services %}
+                        <option value="{{ s.title }}">{{ s.title }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="footer-col">
-                <h4>ГРАФІК РОБОТИ</h4>
-                <p>Пн - Пт: 10:00 — 23:00</p>
-                <p>Сб - Нд: 11:00 — 01:00</p>
+
+            <div class="form-group">
+                <p class="form-label">Ваш номер телефону:</p>
+                <input type="tel" name="phone" 
+                       placeholder="+380XXXXXXXXX" 
+                       pattern="^\+380\d{9}$" 
+                       title="Формат: +380 та 9 цифр"
+                       class="newsletter-input full-width" required>
             </div>
-            <div class="footer-col">
-                <h4>КОНТАКТИ</h4>
-                <p>м. Луцьк, вул. Лесі Українки, 15</p>
-                <p>Тел: +38 (050) 123-45-67</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 LEVEL UP RESTAURANT GROUP. Всі права захищені.</p>
-        </div>
-    </footer>
-</body>
-</html>
+
+            <button type="submit" class="btn-buy full-width btn-service-submit">
+                ЗАМОВИТИ ДЗВІНОК
+            </button>
+        </form>
+    </div>
+{% endblock %}

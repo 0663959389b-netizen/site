@@ -25,6 +25,6 @@ urlpatterns = [
     path('', include('shop.urls')),
 ]
 
-# Це дозволить Django показувати media файли, поки сайт працює на твоєму комп'ютері (у режимі розробки DEBUG=True)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

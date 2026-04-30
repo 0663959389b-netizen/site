@@ -1,55 +1,15 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <title>Контакти - Level Up Rest</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-    <div class="top-nav">
-        <a href="{% url 'home_url' %}" class="nav-link">ГОЛОВНА</a>
-        <a href="{% url 'menu_url' %}" class="nav-link">МЕНЮ</a>
-        <a href="{% url 'services_url' %}" class="nav-link">ПОСЛУГИ</a>
-        <a href="{% url 'contacts_url' %}" class="nav-link">КОНТАКТИ</a>
-        <a href="{% url 'cart_url' %}" class="nav-link cart-link">🛒 КОШИК</a>
-    </div>
-
-    <div class="container">
-        <h1>НАШІ КОНТАКТИ</h1>
-        
-        <div class="contact-block">
+{% extends 'base.html' %}
+{% block content %}
+    <h1>НАШІ КОНТАКТИ</h1>
+            <div class="contact-block">
             <h3 class="contact-heading">Чекаємо на вас:</h3>
             <p class="contact-info">📍 м. Луцьк, вул. Лесі Українки, 15</p>
-            
+
             <h3 class="contact-heading">Забронювати столик:</h3>
             <p class="contact-info">📞 +38 (050) 123-45-67</p>
-            
+
             <h3 class="contact-heading">Графік роботи:</h3>
             <p class="contact-info">🕰 Пн - Пт: 10:00 — 23:00, Сб - Нд: 11:00 — 01:00</p>
         </div>
     </div>
-
-    <footer>
-        <div class="footer-container">
-            <div class="footer-col about-col">
-                <h4>ПРО РЕСТОРАН</h4>
-                <p>Level Up Rest — це місце, де гастрономія стає мистецтвом. Кожна страва — це історія смаку.</p>
-            </div>
-            <div class="footer-col">
-                <h4>ГРАФІК РОБОТИ</h4>
-                <p>Пн - Пт: 10:00 — 23:00</p>
-                <p>Сб - Нд: 11:00 — 01:00</p>
-            </div>
-            <div class="footer-col">
-                <h4>КОНТАКТИ</h4>
-                <p>м. Луцьк, вул. Лесі Українки, 15</p>
-                <p>Тел: +38 (050) 123-45-67</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 LEVEL UP RESTAURANT GROUP. Всі права захищені.</p>
-        </div>
-    </footer>
-</body>
-</html>
+{% endblock %}

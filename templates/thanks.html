@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Дякуємо! - Level Up Rest{% endblock %}
+
+{% block content %}
+<div class="contact-block checkout-form-container">
+    <h1 class="cart-title">ДЯКУЄМО!</h1>
+
+    <div class="success-msg-box">
+        <h2 class="contact-heading">ВАШЕ ЗАМОВЛЕННЯ ПРИЙНЯТО</h2>
+        <p class="hero-subtitle">
+            {% if message %}
+                {{ message }}
+            {% else %}
+                Наші кухарі вже почали готувати ваші страви. Офіціант незабаром підійде до вашого столика.
+            {% endif %}
+        </p>
+    </div>
+
+    <a href="{% url 'home_url' %}" class="btn-buy margin-top-20">НА ГОЛОВНУ</a>
+</div>
+{% endblock %}

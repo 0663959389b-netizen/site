@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Оформлення замовлення - Level Up Rest{% endblock %}
+
+{% block content %}
+<div class="contact-block checkout-form-container">
+    <h1 class="cart-title">ОФОРМЛЕННЯ</h1>
+    
+    <p class="hero-subtitle">
+        Ви майже завершили! Будь ласка, вкажіть номер столика.
+    </p>
+
+    <form method="post" action="{% url 'checkout_url' %}">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label class="form-label">Вкажіть номер столика:</label>
+            <input type="number" 
+                   name="table_number" 
+                   class="newsletter-input full-width" 
+                   required 
+                   min="1" 
+                   max="50">
+        </div>
+
+        <p class="form-label margin-top-20">Ваше замовлення буде сформовано автоматично з товарів у кошику.</p>
+
+        <button type="submit" class="btn-buy full-width margin-top-20">
+            ПІДТВЕРДИТИ ЗАМОВЛЕННЯ
+        </button>
+    </form>
+</div>
+{% endblock %}

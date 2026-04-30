@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Вхід - Level Up Rest{% endblock %}
+
+{% block content %}
+<div class="contact-block auth-card">
+    <h2 class="contact-heading">ВХІД У КАБІНЕТ</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="auth-form-group">
+            <label class="auth-label-text">Логін:</label>
+            <input type="text" name="username" class="newsletter-input w-100" required>
+        </div>
+        
+        <div class="auth-form-group mb-25">
+            <label class="auth-label-text">Пароль:</label>
+            <input type="password" name="password" class="newsletter-input w-100" required>
+        </div>
+        
+        <button type="submit" class="btn-buy w-100">УВІЙТИ</button>
+    </form>
+    
+    <div class="auth-footer">
+        <a href="{% url 'password_reset' %}" class="forgot-password-link">Забули пароль?</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>ОСОБИСТИЙ КАБІНЕТ</h1>
+<div class="contact-block full-width">
+    <h2 class="contact-heading">Вітаємо, {{ user.username }}!</h2>
+    {% if user.is_superuser %}
+        <p class="admin-notice">РЕЖИМ АДМІНІСТРАТОРА (Перегляд усіх замовлень)</p>
+    {% endif %}
+
+    <table class="cart-table margin-top-20">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Дата</th>
+                <th>Стіл</th>
+                <th>Деталі</th>
+                <th>Сума</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for o in orders %}
+            <tr>
+                <td>#{{ o.id }}</td>
+                <td>{{ o.created_at|date:"d.m.Y H:i" }}</td>
+                <td>{{ o.table_number|default:"-" }}</td>
+                <td>{{ o.items_json }}</td>
+                <td class="accent-text">{{ o.total_price }} грн</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">Замовлень поки немає.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

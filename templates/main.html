@@ -1,25 +1,17 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ title }}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-    <div class="top-nav">
-        <a href="{% url 'home_url' %}" class="nav-link">ГОЛОВНА</a>
-        <a href="{% url 'menu_url' %}" class="nav-link">МЕНЮ</a>
-        <a href="{% url 'services_url' %}" class="nav-link">ПОСЛУГИ</a>
-        <a href="{% url 'contacts_url' %}" class="nav-link">КОНТАКТИ</a>
-        <a href="{% url 'cart_url' %}" class="nav-link cart-link">🛒 КОШИК</a>
-    </div>
 
-    <div class="container">
-        <h1>LEVEL UP RESTAURANT</h1>
+{% block title %}Головна - LEVEL UP RESTAURANT{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="hero-section text-center">
+        <h1 class="main-title">LEVEL UP RESTAURANT</h1>
         <p class="hero-subtitle">Досвід вишуканої кухні у затишній атмосфері. Ласкаво просимо до Level Up Rest, де смак зустрічається з мистецтвом. Насолоджуйтесь вишуканими стравами та відмінним сервісом у розкішному інтер'єрі.</p>
+    </section>
 
-        <h2>ВІДГУКИ НАШИХ ГОСТЕЙ</h2>
+    <section class="reviews-section mt-30">
+        <h2 class="section-title">ВІДГУКИ НАШИХ ГОСТЕЙ</h2>
         <div class="reviews-wrapper">
             {% for review in reviews %}
             <div class="review-card">
@@ -28,78 +20,60 @@
                 <button class="read-more-btn hidden-initially" onclick="toggleReview('review-{{ review.id }}', this)">Читати далі</button>
             </div>
             {% empty %}
-                <p>Відгуків поки немає. Будьте першим!</p>
+                <p class="text-center accent-gold">Відгуків поки немає. Будьте першим!</p>
             {% endfor %}
         </div>
-        <div class="newsletter-section">
-    <h3 class="newsletter-title">ПІДПИСАТИСЯ НА НАШІ НОВИНИ</h3>
+    </section>
 
-    {% if subscribed %}
-        <div class="success-msg-box">
-            <p class="success-msg-title">✨ ДЯКУЄМО, ЩО ОБРАЛИ НАС! ✨</p>
-            <p class="success-msg-desc">Ви вже у списку наших особливих гостей. Очікуйте на смачні новини та приємні сюрпризи на вашу пошту.</p>
-        </div>
-    {% else %}
-        <p class="newsletter-prompt">Залиште свій email, щоб першими дізнаватися про нові страви та акції.</p>
+    <section class="newsletter-section">
+        {% if subscribed %}
+            <div class="success-subscription">
+                <p class="success-msg-title">✨ ДЯКУЄМО, ЩО ОБРАЛИ НАС! ✨</p>
+                <p class="success-msg-desc">Ви вже у списку наших особливих гостей. Очікуйте на смачні новини.</p>
+            </div>
+        {% else %}
+            <h3 class="newsletter-title">ПІДПИСАТИСЯ НА НАШІ НОВИНИ</h3>
+            <p class="newsletter-prompt">Залиште свій email, щоб першими дізнаватися про нові страви та акції.</p>
 
-        <form method="post" class="newsletter-form">
-            {% csrf_token %}
-            {{ news_form.email }}
-            <button type="submit" class="btn-buy">ПІДПИСАТИСЯ</button>
-        </form>
+            <form method="post" class="newsletter-form">
+                {% csrf_token %}
+                <div class="newsletter-form-group">
+                    <input type="email" name="email" class="newsletter-input" placeholder="Ваш email для новин" required>
+                    <button type="submit" class="newsletter-btn">ПІДПИСАТИСЯ</button>
+                </div>
+            </form>
 
-        {% if error_message %}
-            <p class="error-msg">{{ error_message }}</p>
+            {% if error_message %}
+                <p class="error-msg">{{ error_message }}</p>
+            {% endif %}
         {% endif %}
-    {% endif %}
+    </section>
 </div>
-    </div>
+{% endblock %}
 
-    <footer>
-        <div class="footer-container">
-            <div class="footer-col about-col">
-                <h4>ПРО РЕСТОРАН</h4>
-                <p>Level Up Rest — це місце, де гастрономія стає мистецтвом. Кожна страва — це історія смаку.</p>
-            </div>
-            <div class="footer-col">
-                <h4>ГРАФІК РОБОТИ</h4>
-                <p>Пн - Пт: 10:00 — 23:00</p>
-                <p>Сб - Нд: 11:00 — 01:00</p>
-            </div>
-            <div class="footer-col">
-                <h4>КОНТАКТИ</h4>
-                <p>м. Луцьк, вул. Лесі Українки, 15</p>
-                <p>Тел: +38 (050) 123-45-67</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 LEVEL UP RESTAURANT GROUP. Всі права захищені.</p>
-        </div>
-    </footer>
-
-    <script>
-        function toggleReview(textId, btnElement) {
-            const textBlock = document.getElementById(textId);
-            if (textBlock.classList.contains('collapsed')) {
-                textBlock.classList.remove('collapsed');
-                btnElement.innerText = 'Сховати';
-            } else {
-                textBlock.classList.add('collapsed');
-                btnElement.innerText = 'Читати далі';
-            }
+{% block extra_js %}
+<script>
+    function toggleReview(textId, btnElement) {
+        const textBlock = document.getElementById(textId);
+        if (textBlock.classList.contains('collapsed')) {
+            textBlock.classList.remove('collapsed');
+            btnElement.innerText = 'Сховати';
+        } else {
+            textBlock.classList.add('collapsed');
+            btnElement.innerText = 'Читати далі';
         }
+    }
 
-        window.addEventListener('load', function() {
-            const reviews = document.querySelectorAll('.review-text.collapsed');
-            reviews.forEach(function(reviewBlock) {
-                if (reviewBlock.scrollHeight > reviewBlock.clientHeight + 2) {
-                    const btn = reviewBlock.nextElementSibling;
-                    if (btn && btn.classList.contains('read-more-btn')) {
-                        btn.classList.remove('hidden-initially');
-                    }
+    window.addEventListener('load', function() {
+        const reviews = document.querySelectorAll('.review-text.collapsed');
+        reviews.forEach(function(reviewBlock) {
+            if (reviewBlock.scrollHeight > reviewBlock.clientHeight + 2) {
+                const btn = reviewBlock.nextElementSibling;
+                if (btn && btn.classList.contains('read-more-btn')) {
+                    btn.classList.remove('hidden-initially');
                 }
-            });
+            }
         });
-    </script>
-</body>
-</html>
+    });
+</script>
+{% endblock %}
